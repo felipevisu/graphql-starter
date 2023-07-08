@@ -4,15 +4,19 @@ import graphene
 from django import forms
 from django.core.exceptions import ImproperlyConfigured
 
-from graphqlstarter.graphql.core.types.common import NonNullList
-
-from ..filters import (EnumFilter, GlobalIDFormField,
-                       GlobalIDMultipleChoiceField, ListObjectTypeFilter,
-                       ObjectTypeFilter)
+from ..filters import (
+    EnumFilter,
+    GlobalIDFormField,
+    GlobalIDMultipleChoiceField,
+    ListObjectTypeFilter,
+    ObjectTypeFilter,
+)
+from .common import NonNullList
 
 
 def get_form_field_description(field):
     return str(field.help_text) if field.help_text else None
+
 
 @singledispatch
 def convert_form_field(field):

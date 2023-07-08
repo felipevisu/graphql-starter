@@ -1,7 +1,6 @@
 import json
 from decimal import Decimal, InvalidOperation
-from typing import (Any, Callable, Dict, Iterable, List, Optional, Tuple,
-                    Union, cast)
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Union, cast
 
 import graphene
 from django.conf import settings
@@ -81,7 +80,6 @@ def _prepare_filter_expression(
     sorting_fields: List[str],
     sorting_direction: str,
 ) -> Tuple[Q, Dict[str, Union[str, bool]]]:
-
     field_expression: Dict[str, Union[str, bool]] = {}
     extra_expression = Q()
     for cursor_id, cursor_value in enumerate(cursor[:index]):
@@ -304,7 +302,7 @@ def connection_from_queryset_slice(
 
 def create_connection_slice(
     iterable,
-    info,
+    info: "ResolveInfo",
     args,
     connection_type,
     edge_type=None,
@@ -422,20 +420,32 @@ def slice_connection_iterable(
 
 
 def filter_connection_queryset(iterable, args, request=None, root=None):
+    update_args_with_channel(args, root)
     filterset_class = args[FILTERSET_CLASS]
     filter_field_name = args[FILTERS_NAME]
     filter_input = args.get(filter_field_name)
+    filter_func = filter_qs
 
     if filter_input:
-        queryset = iterable
-
-        filterset = filterset_class(filter_input, queryset=queryset, request=request)
-        if not filterset.is_valid():
-            raise GraphQLError(json.dumps(filterset.errors.get_json_data()))
-
-        return filterset.qs
+        return filter_func(iterable, args, filterset_class, filter_input, request)
 
     return iterable
+
+
+def filter_qs(iterable, args, filterset_class, filter_input, request):
+    queryset = iterable
+
+    filterset = filterset_class(filter_input, queryset=queryset, request=request)
+    if not filterset.is_valid():
+        raise GraphQLError(json.dumps(filterset.errors.get_json_data()))
+
+    return filterset.qs
+
+
+def update_args_with_channel(args, root):
+    # for nested filters get channel from ChannelContext object
+    if "channel" not in args and root and hasattr(root, "channel_slug"):
+        args["channel"] = root.channel_slug
 
 
 class NonNullConnection(Connection):
@@ -488,5 +498,7 @@ class CountableConnection(NonNullConnection):
 
         if callable(total_count):
             return total_count()
+
+        return total_count
 
         return total_count
