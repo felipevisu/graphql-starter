@@ -1,12 +1,15 @@
 import graphene
 
+from .blog.schema import Mutation as BlogMutation
 from .blog.schema import Query as BlogQuery
 
 
-class Query(
-    BlogQuery
-):
+class Query(BlogQuery):
     pass
 
 
-schema = graphene.Schema(query=Query)
+class Mutation(BlogMutation):
+    pass
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)

@@ -1,7 +1,3 @@
-aniso8601==7.0.0
-asgiref==3.5.2
-astroid==2.12.13
-dill==0.3.6
 dj-database-url==0.5.0
 Django==3.2.14
 django-cors-headers==3.11.0
@@ -9,14 +5,8 @@ django-filter==22.1
 django-graphql-jwt==0.3.4
 django-storages==1.12.3
 graphene==2.1.9
-graphene-django==2.15.0
-graphene-file-upload==1.3.0
 graphql-core==2.3.2
 graphql-relay==2.0.1
-isort==5.11.1
-lazy-object-proxy==1.8.0
-mccabe==0.7.0
-platformdirs==2.6.0
 promise==2.3
 psycopg2-binary==2.9.6
 PyJWT==2.6.0
@@ -25,12 +15,3 @@ pylint-celery==0.3
 pylint-django==2.5.3
 pylint-plugin-utils==0.7
 python-dotenv==0.20.0
-pytz==2022.2.1
-Rx==1.6.1
-singledispatch==3.7.0
-six==1.16.0
-sqlparse==0.4.2
-text-unidecode==1.3
-tomli==2.0.1
-tomlkit==0.11.6
-wrapt==1.14.1
